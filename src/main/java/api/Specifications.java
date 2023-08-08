@@ -15,9 +15,15 @@ public class Specifications {
                 .build();
     }
 
-    public static RequestSpecification responceSpecOk200(){
-        return (RequestSpecification) new ResponseSpecBuilder()
+    public static ResponseSpecification  responceSpecOk200(){
+        return (ResponseSpecification) new ResponseSpecBuilder()
                 .expectStatusCode(200)
+                .build();
+    }
+
+    public static ResponseSpecification  responceSpecError400(){
+        return (ResponseSpecification) new ResponseSpecBuilder()
+                .expectStatusCode(400)
                 .build();
     }
     public static void installSpecification(RequestSpecification request, ResponseSpecification responce){
