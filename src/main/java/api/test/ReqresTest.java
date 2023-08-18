@@ -1,5 +1,6 @@
 package api.test;
 import java.lang.reflect.Type;
+import java.time.Clock;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,8 @@ public class ReqresTest {
 
     private final static String API_UNKNOWN = "api/unknown";
 
-    private final static String API_USERS_DELETE = "/api/users/2";
+    private final static String API_USERS_DELETE = "api/users/2";
+    private final static String API_USERS_UPDATE = "api/users/2";
 
 
     @Test
@@ -91,6 +93,22 @@ public class ReqresTest {
                 .when()
                 .delete(API_USERS_DELETE)
                 .then().log().headers().log().status();
+
+    }
+
+    @Test
+    public void time_Test(){
+        Specifications.installSpecification(Specifications.requestSpec(URL), Specifications.responceSpecOk200());
+        UserTime user = new UserTime("morpheus", "zion resident");
+        UserTimeResponse response = given()
+                .body(user)
+                .when()
+                .patch(API_USERS_UPDATE)
+                .then().log().all()
+                .extract().as(UserTimeResponse.class);
+        String regex = "(.{5})$";
+        String currentTime = Clock.systemUTC().instant().toString().replaceAll(regex, "");
+        Assertions.assertThat(currentTime.equals(response.getUpdatedAt().replaceAll(regex, "")));
 
     }
 
